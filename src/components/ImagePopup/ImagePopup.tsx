@@ -1,6 +1,6 @@
 import * as React from 'react';
+import {useCallback} from 'react';
 import {CardModel} from "../../models/CardModel";
-import {useCallback} from "react";
 
 type Props = {
     card: CardModel | null,

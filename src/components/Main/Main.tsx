@@ -1,6 +1,6 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import ava from "../../images/ava.png";
-import {useEffect, useState} from "react";
 import {api} from "../../utils/api";
 import {CardModel} from "../../models/CardModel";
 import {UserInfoModel} from "../../models/UserInfoModel";
@@ -54,7 +54,7 @@ export const Main = (props: Props) => {
             <section className="places">
                 {cards.reverse().map((card: CardModel) => {
                     return (
-                        <Card key={card._id} card={card} onCardClick={props.onCardClick} />
+                        <Card key={card._id} card={card} onCardClick={props.onCardClick}/>
                     )
                 })}
             </section>

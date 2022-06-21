@@ -1,9 +1,6 @@
-// @flow
 import * as React from 'react';
 
-type Props = {
-
-};
+type Props = {};
 export const Header = (props: Props) => {
     return (
         <header className="header">

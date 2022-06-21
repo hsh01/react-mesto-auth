@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useCallback} from "react";
+import {useCallback} from 'react';
 
 type Props = {
     title: string,
@@ -11,7 +11,7 @@ export const PopupWithForm = ({title, name, children, onClose}: Props) => {
 
     const handleMouseDown = useCallback((event: any) => {
         if (event.target.classList.contains('popup_opened')
-                || event.target.classList.contains('popup__close')) {
+            || event.target.classList.contains('popup__close')) {
             onClose();
         }
     }, []);
