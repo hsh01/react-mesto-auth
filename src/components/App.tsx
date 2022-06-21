@@ -31,7 +31,7 @@ function App() {
 
     const handleRemovePlaceClick = useCallback(() => {
         setIsRemovePlacePopupOpen(prevState => !prevState);
-    }, [selectedCard]);
+    }, []);
 
     const handleCardClick = useCallback((card: CardModel) => {
         setSelectedCard(card);
@@ -43,7 +43,7 @@ function App() {
         setIsAddPlacePopupOpen(false);
         setIsRemovePlacePopupOpen(false);
         setSelectedCard(undefined);
-    }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isRemovePlacePopupOpen]);
+    }, []);
 
 
     return (

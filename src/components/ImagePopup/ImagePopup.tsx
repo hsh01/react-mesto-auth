@@ -14,7 +14,7 @@ export const ImagePopup = ({card, onClose}: Props) => {
             || event.target.classList.contains('popup__close')) {
             onClose();
         }
-    }, []);
+    }, [onClose]);
 
     return (
         card &&

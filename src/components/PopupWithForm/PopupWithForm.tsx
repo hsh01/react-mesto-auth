@@ -14,7 +14,7 @@ export const PopupWithForm = ({title, name, children, onClose}: Props) => {
             || event.target.classList.contains('popup__close')) {
             onClose();
         }
-    }, []);
+    }, [onClose]);
 
     return (
         <div className={`popup popup_type_${name} popup_opened`} onMouseDown={handleMouseDown}>
