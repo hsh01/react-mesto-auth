@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
+// @ts-ignore
 import ava from "../../images/ava.png";
 import {api} from "../../utils/api";
 import {CardModel} from "../../models/CardModel";

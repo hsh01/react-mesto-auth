@@ -20,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "conv": "npx tsc --jsx preserve -t esnext --outDir src --noEmit false"
   },
   "eslintConfig": {
     "extends": [
