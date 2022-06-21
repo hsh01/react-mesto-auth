@@ -1,0 +1,17 @@
+.place__remove {
+    width: 18px;
+    height: 19px;
+    background-image: url(../../../images/trash.svg);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.place__remove:hover {
+    opacity: 0.6;
+}

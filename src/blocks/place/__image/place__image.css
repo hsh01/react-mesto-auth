@@ -1,0 +1,12 @@
+.place__image {
+    width: 282px;
+    height: 282px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.9s ease-in-out;
+    cursor: pointer;
+}
+
+.place__image:hover {
+    transform: scale(1.05);
+}
