@@ -1,19 +1,9 @@
 import * as React from 'react';
-import {CardModel} from "../../models/CardModel";
-
-type Props = {
-    card: CardModel,
-    onCardClick: (card: CardModel) => void
-};
-
-export const Card = ({card, onCardClick}: Props) => {
-
+export const Card = ({ card, onCardClick }) => {
     function handleClick() {
         onCardClick(card);
     }
-
-    return (
-        <article className="place">
+    return (<article className="place">
             <img className="place__image" src={card.link} alt={card.name} onClick={handleClick}/>
             <div className="place__list">
                 <h2 className="place__title">{card.name}</h2>
@@ -22,6 +12,5 @@ export const Card = ({card, onCardClick}: Props) => {
                     <span className="place__like-counter">{card.likes.length}</span>
                 </div>
             </div>
-        </article>
-    );
+        </article>);
 };
