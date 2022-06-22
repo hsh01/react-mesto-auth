@@ -13,7 +13,7 @@ export const Card = ({card, onCardClick}: Props) => {
     }
 
     return (
-        <article className="place" key={card._id}>
+        <article className="place">
             <img className="place__image" src={card.link} alt={card.name} onClick={handleClick}/>
             <div className="place__list">
                 <h2 className="place__title">{card.name}</h2>
