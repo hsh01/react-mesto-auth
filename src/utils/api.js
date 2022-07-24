@@ -7,6 +7,7 @@ class Api {
     }
     _request(path, options = undefined) {
         options = {
+            ...options,
             headers: { ...options?.headers, ...this._headers }
         };
         return fetch(`${this._baseUrl}/${path}`, options)
@@ -28,7 +29,7 @@ class Api {
             body: JSON.stringify(data)
         });
     }
-    patchUserAvatar(data = undefined) {
+    patchUserAvatar(data) {
         const path = `users/me/avatar`;
         return this._request(path, {
             method: 'PATCH',
@@ -39,26 +40,34 @@ class Api {
         const path = 'cards';
         return this._request(path, {});
     }
-    postCard(data = undefined) {
+    postCard(data) {
         const path = 'cards';
         return this._request(path, {
             method: 'POST',
             body: JSON.stringify(data)
         });
     }
-    deleteCard(cardId = undefined) {
+    deleteCard(cardId) {
         const path = `cards/${cardId}`;
         return this._request(path, {
             method: 'DELETE',
         });
     }
-    putLike(cardId = undefined) {
+    changeLikeCardStatus(cardId, isLiked) {
+        if (isLiked) {
+            return this._putLike(cardId);
+        }
+        else {
+            return this._deleteLike(cardId);
+        }
+    }
+    _putLike(cardId) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
             method: 'PUT',
         });
     }
-    deleteLike(cardId = undefined) {
+    _deleteLike(cardId) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
             method: 'DELETE',
