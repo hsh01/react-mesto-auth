@@ -1,12 +1,21 @@
 import * as React from 'react';
 import {CardModel} from "../../models/CardModel";
+import {CurrentUserContext} from "../../context/CurrentUserContext";
 
 type Props = {
     card: CardModel,
-    onCardClick: (card: CardModel) => void
+    onCardClick: (card: CardModel) => void,
+    onCardLike: (card: CardModel) => void,
+    onCardRemove: (card: CardModel) => void,
 };
 
-export const Card = ({card, onCardClick}: Props) => {
+export const Card = ({card, onCardClick, onCardLike, onCardRemove}: Props) => {
+    const currentUser = React.useContext(CurrentUserContext);
+    const isOwn = card.owner!._id === currentUser._id;
+
+    const isLiked = card.likes!.some(i => i._id === currentUser._id);
+    const cardLikeButtonClassName = `place__like ${isLiked ? 'place__like_active' : ''}`;
+
 
     function handleClick() {
         onCardClick(card);
@@ -18,10 +27,14 @@ export const Card = ({card, onCardClick}: Props) => {
             <div className="place__list">
                 <h2 className="place__title">{card.name}</h2>
                 <div className="place__like-wrapper">
-                    <button className="place__like" type="button" aria-label="лайк"/>
-                    <span className="place__like-counter">{card.likes.length}</span>
+                    <button className={cardLikeButtonClassName} type="button" aria-label="лайк" onClick={() => onCardLike(card)}/>
+                    <span className="place__like-counter">{card.likes!.length}</span>
                 </div>
             </div>
+            {
+                isOwn &&
+                <button className="place__remove" type="button" aria-label="удалить" onClick={() => onCardRemove(card)}/>
+            }
         </article>
     );
 };

@@ -4,6 +4,6 @@ export type CardModel = {
     _id?: string,
     name: string,
     link: string,
-    likes: Array<UserInfoModel>,
-    owner: UserInfoModel
+    likes?: Array<UserInfoModel>,
+    owner?: UserInfoModel
 }

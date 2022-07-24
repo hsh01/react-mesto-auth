@@ -1,3 +1,5 @@
+import {CardModel} from "../models/CardModel";
+
 class Api {
     private _baseUrl: string;
     private readonly _headers: HeadersInit;
@@ -9,6 +11,7 @@ class Api {
 
     _request(path: string, options: RequestInit | undefined = undefined) {
         options = {
+            ...options,
             headers: {...options?.headers, ...this._headers}
         };
         return fetch(`${this._baseUrl}/${path}`, options)
@@ -33,7 +36,7 @@ class Api {
         });
     }
 
-    patchUserAvatar(data = undefined) {
+    patchUserAvatar(data: any) {
         const path = `users/me/avatar`;
         return this._request(path, {
             method: 'PATCH',
@@ -46,7 +49,7 @@ class Api {
         return this._request(path, {});
     }
 
-    postCard(data = undefined) {
+    postCard(data: CardModel) {
         const path = 'cards';
         return this._request(path, {
             method: 'POST',
@@ -54,21 +57,29 @@ class Api {
         });
     }
 
-    deleteCard(cardId = undefined) {
+    deleteCard(cardId: string) {
         const path = `cards/${cardId}`;
         return this._request(path, {
             method: 'DELETE',
         });
     }
 
-    putLike(cardId = undefined) {
+    changeLikeCardStatus(cardId: string | undefined, isLiked: boolean) {
+        if (isLiked) {
+            return this._putLike(cardId);
+        } else {
+            return this._deleteLike(cardId);
+        }
+    }
+
+    _putLike(cardId: string | undefined) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
             method: 'PUT',
         });
     }
 
-    deleteLike(cardId = undefined) {
+    _deleteLike(cardId: string | undefined) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
             method: 'DELETE',
