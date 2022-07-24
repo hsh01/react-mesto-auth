@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {useCallback} from 'react';
-import {UserInfoModel} from "../../models/UserInfoModel";
 
 type Props = {
     title: string,
@@ -11,7 +10,15 @@ type Props = {
     children?: React.ReactNode,
     onSubmit?: (e: any) => void,
 };
-export const PopupWithForm = ({title, name, children, onClose, isOpen=false, buttonLabel='Сохранить', onSubmit}: Props) => {
+export const PopupWithForm = ({
+                                  title,
+                                  name,
+                                  children,
+                                  onClose,
+                                  isOpen = false,
+                                  buttonLabel = 'Сохранить',
+                                  onSubmit
+                              }: Props) => {
 
     const handleMouseDown = useCallback((event: any) => {
         if (event.target.classList.contains('popup_opened')
