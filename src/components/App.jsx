@@ -1,75 +1,55 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Header } from "./Header/Header";
-import { Main } from "./Main/Main";
-import { Footer } from "./Footer/Footer";
-import { PopupWithForm } from "./PopupWithForm/PopupWithForm";
-import { ImagePopup } from "./ImagePopup/ImagePopup";
-import { api } from "../utils/api";
-import { CurrentUserContext } from '../context/CurrentUserContext';
+import {useCallback, useEffect, useState} from 'react';
+import {Header} from "./Header";
+import {Main} from "./Main";
+import {Footer} from "./Footer";
+import {ImagePopup} from "./ImagePopup";
+import {CardModel} from "../models/CardModel";
+import {api} from "../utils/api";
+import {UserInfoModel} from "../models/UserInfoModel";
+import {CurrentUserContext} from '../context/CurrentUserContext';
 // @ts-ignore
 import ava from "../images/ava.png";
-import { EditProfilePopup } from "./EditProfilePopup/EditProfilePopup";
-import { EditAvatarPopup } from "./EditAvatarPopup/EditAvatarPopup";
-import { AddPlacePopup } from "./AddPlacePopup/AddPlacePopup";
+import {EditProfilePopup} from "./EditProfilePopup";
+import {EditAvatarPopup} from "./EditAvatarPopup";
+import {AddPlacePopup} from "./AddPlacePopup";
+import {RemovePlacePopup} from "./RemovePlacePopup";
+
 function App() {
-    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-    const [isRemovePlacePopupOpen, setIsRemovePlacePopupOpen] = useState(false);
-    const [selectedCard, setSelectedCard] = useState(null);
-    const [currentUser, setCurrentUser] = useState({
+
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState<boolean>(false);
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState<boolean>(false);
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState<boolean>(false);
+    const [isRemovePlacePopupOpen, setIsRemovePlacePopupOpen] = useState<boolean>(false);
+
+    const [removeCard, setRemoveCard] = useState<string | null>(null);
+
+    const [selectedCard, setSelectedCard] = useState<CardModel | null>(null);
+    const [currentUser, setCurrentUser] = useState<UserInfoModel>({
         name: 'Загрузка...',
         about: '',
         avatar: ava,
     });
-    const [cards, setCards] = useState([]);
-    useEffect(() => {
-        api.getCards()
-            .then((data) => {
-            setCards([...cards, ...data]);
-        });
-    }, []);
-    function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-        });
-    }
-    function handleCardRemove(card) {
-        api.deleteCard(card._id).then(r => {
-            setCards((state) => state.filter((c) => c._id !== card._id));
-        });
-    }
+
+
+    const [cards, setCards] = useState<CardModel[]>([]);
+
     const handleEditAvatarClick = () => {
         setIsEditAvatarPopupOpen(true);
-    };
+    }
+
     const handleEditProfileClick = () => {
         setIsEditProfilePopupOpen(true);
-    };
+    }
+
     const handleAddPlaceClick = () => {
         setIsAddPlacePopupOpen(true);
     };
-    const handleRemovePlaceClick = () => {
+
+    const handleRemovePlaceClick = (cardId: string) => {
+        setRemoveCard(cardId);
         setIsRemovePlacePopupOpen(true);
-    };
-    const handleCardClick = (card) => {
-        setSelectedCard(card);
-    };
-    const handleUpdateUser = (user) => {
-        api.patchUserInfo(user)
-            .then(user => setCurrentUser(user))
-            .then(() => setIsEditProfilePopupOpen(false));
-    };
-    const handleUpdateAvatar = (user) => {
-        api.patchUserAvatar(user)
-            .then(user => setCurrentUser(user))
-            .then(() => setIsEditAvatarPopupOpen(false));
-    };
-    const handleAddPlaceSubmit = (card) => {
-        api.postCard(card)
-            .then(card => setCards([card, ...cards]))
-            .then(() => setIsAddPlacePopupOpen(false));
-    };
+    }
+
     const closeAllPopups = useCallback(() => {
         setIsEditAvatarPopupOpen(false);
         setIsEditProfilePopupOpen(false);
@@ -77,24 +57,85 @@ function App() {
         setIsRemovePlacePopupOpen(false);
         setSelectedCard(null);
     }, []);
+
+    const handleCardClick = (card: CardModel) => {
+        setSelectedCard(card);
+    }
+
+    function handleCardLike(card: CardModel) {
+        const isLiked = card.likes!.some(i => i._id === currentUser._id);
+
+        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        })
+            .catch((err) => console.log(err));
+    }
+
+    function handleCardRemove(cardId: string) {
+        return api.deleteCard(cardId!).then(() => {
+            setCards((state) => state.filter((c) => c._id !== cardId));
+        });
+    }
+
+    const handleAddPlaceSubmit = (card: CardModel) => {
+        return api.postCard(card).then(card => setCards([card, ...cards]))
+    }
+
+    const handleUpdateUser = (user: { name: string | undefined; about: string | undefined }) => {
+        return api.patchUserInfo(user).then(user => setCurrentUser(user))
+    }
+
+    const handleUpdateAvatar = (user: { avatar: string }) => {
+        return api.patchUserAvatar(user).then(user => setCurrentUser(user));
+    }
+
     useEffect(() => {
         document.title = 'Mesto';
-        api.getUserInfo()
-            .then((user) => {
-            setCurrentUser(user);
-        });
+        Promise.all([
+            api.getUserInfo()
+                .then((user: UserInfoModel) => {
+                    setCurrentUser(user);
+                }),
+            api.getCards()
+                .then((data) => {
+                    setCards([...cards, ...data]);
+                })
+        ]).catch((err) => console.log(err));
     }, []);
-    return (<CurrentUserContext.Provider value={currentUser}>
-            <Header />
-            <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} handleCardClick={handleCardClick} cards={cards} onCardLike={handleCardLike} onCardRemove={handleCardRemove}/>
-            <Footer />
-            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
+
+
+    useEffect(() => {
+        function handleEscapeKey(event: KeyboardEvent) {
+            if (event.code === 'Escape') {
+                closeAllPopups()
+            }
+        }
+
+        document.addEventListener('keydown', handleEscapeKey)
+        return () => document.removeEventListener('keydown', handleEscapeKey)
+    }, []);
+
+    return (
+        <CurrentUserContext.Provider value={currentUser}>
+            <Header/>
+            <Main onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  handleCardClick={handleCardClick}
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardRemove={handleRemovePlaceClick}
+            />
+            <Footer/>
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
+                             onUpdateAvatar={handleUpdateAvatar}/>
             <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
             <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onCardAdd={handleAddPlaceSubmit}/>
-            <PopupWithForm title="Вы уверены?" name="remove_place" onClose={closeAllPopups} buttonLabel="Да" isOpen={isRemovePlacePopupOpen}>
-                <input className="form__input" name="_id" type="hidden" required value=""/>
-            </PopupWithForm>
+            <RemovePlacePopup isOpen={isRemovePlacePopupOpen} onClose={closeAllPopups} onCardRemove={handleCardRemove}
+                              cardId={removeCard!}/>
             <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
-        </CurrentUserContext.Provider>);
+        </CurrentUserContext.Provider>
+    );
 }
+
 export default App;
