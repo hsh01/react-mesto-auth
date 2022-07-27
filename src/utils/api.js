@@ -1,15 +1,13 @@
-import {CardModel} from "../models/CardModel";
-
 class Api {
-    private _baseUrl: string;
-    private readonly _headers: HeadersInit;
+    _baseUrl;
+    _headers;
 
-    constructor({baseUrl, headers}: any) {
+    constructor({baseUrl, headers}) {
         this._baseUrl = baseUrl;
         this._headers = headers;
     }
 
-    _request(path: string, options: RequestInit | undefined = undefined) {
+    _request(path, options = undefined) {
         options = {
             ...options,
             headers: {...options?.headers, ...this._headers}
@@ -28,7 +26,7 @@ class Api {
         return this._request(path);
     }
 
-    patchUserInfo(data: any) {
+    patchUserInfo(data) {
         const path = 'users/me';
         return this._request(path, {
             method: 'PATCH',
@@ -36,7 +34,7 @@ class Api {
         });
     }
 
-    patchUserAvatar(data: any) {
+    patchUserAvatar(data) {
         const path = `users/me/avatar`;
         return this._request(path, {
             method: 'PATCH',
@@ -49,7 +47,7 @@ class Api {
         return this._request(path, {});
     }
 
-    postCard(data: CardModel) {
+    postCard(data) {
         const path = 'cards';
         return this._request(path, {
             method: 'POST',
@@ -57,14 +55,14 @@ class Api {
         });
     }
 
-    deleteCard(cardId: string) {
+    deleteCard(cardId) {
         const path = `cards/${cardId}`;
         return this._request(path, {
             method: 'DELETE',
         });
     }
 
-    changeLikeCardStatus(cardId: string | undefined, isLiked: boolean) {
+    changeLikeCardStatus(cardId, isLiked) {
         if (isLiked) {
             return this._putLike(cardId);
         } else {
@@ -72,14 +70,14 @@ class Api {
         }
     }
 
-    _putLike(cardId: string | undefined) {
+    _putLike(cardId) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
             method: 'PUT',
         });
     }
 
-    _deleteLike(cardId: string | undefined) {
+    _deleteLike(cardId) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
             method: 'DELETE',
@@ -94,5 +92,4 @@ const api = new Api({
         'Content-Type': 'application/json'
     }
 });
-
 export {api};
