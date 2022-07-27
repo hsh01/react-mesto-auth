@@ -17,7 +17,7 @@ export const ImagePopup = ({card, onClose}: Props) => {
     }, [onClose]);
 
     return (
-        <div className={`popup popup_fullscreen ${card && 'popup_opened'}`} onMouseDown={handleMouseDown}>
+        <div className={`popup popup_fullscreen ${card ? 'popup_opened' : ''}`} onMouseDown={handleMouseDown}>
             <figure className="popup__container popup__container_view_img">
                 <button className="popup__close" type="button" title="закрыть" aria-label="закрыть"/>
                 <img className="popup__img" src={card?.link ?? '#'} alt={card?.name}/>

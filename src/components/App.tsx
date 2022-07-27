@@ -7,12 +7,12 @@ import {CardModel} from "../models/CardModel";
 import {api} from "../utils/api";
 import {UserInfoModel} from "../models/UserInfoModel";
 import {CurrentUserContext} from '../context/CurrentUserContext';
-// @ts-ignore
-import ava from "../images/ava.png";
 import {EditProfilePopup} from "./EditProfilePopup";
 import {EditAvatarPopup} from "./EditAvatarPopup";
 import {AddPlacePopup} from "./AddPlacePopup";
 import {RemovePlacePopup} from "./RemovePlacePopup";
+// @ts-ignore
+import ava from "../images/ava.png";
 
 function App() {
 
@@ -29,7 +29,6 @@ function App() {
         about: '',
         avatar: ava,
     });
-
 
     const [cards, setCards] = useState<CardModel[]>([]);
 
