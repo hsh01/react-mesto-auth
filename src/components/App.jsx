@@ -64,21 +64,26 @@ function App() {
     }
 
 
-    /**
-     * Lifecycle:
-     * 1. start handleAddPlaceSubmit -> Promise | (App.jsx:113 - App.jsx:74)
-     * 2. forward Promise to PopupWithForm | (AddPlacePopup.jsx:19 - AddPlacePopup.jsx:22)
-     * 3. run Promise with catch pipeline in show in form | (PopupWithForm.jsx:28)
-     * @param card
-     */
     const handleAddPlaceSubmit = (card) => {
-        return api.postCard(card).then(card => setCards([card, ...cards]));
+        return api.postCard(card).then(
+            card => setCards([card, ...cards]),
+            (err) => {
+                console.log(err);
+            });
     };
     const handleUpdateUser = (user) => {
-        return api.patchUserInfo(user).then(user => setCurrentUser(user));
+        return api.patchUserInfo(user).then(
+            user => setCurrentUser(user),
+            (err) => {
+                console.log(err);
+            });
     };
     const handleUpdateAvatar = (user) => {
-        return api.patchUserAvatar(user).then(user => setCurrentUser(user));
+        return api.patchUserAvatar(user).then(
+            user => setCurrentUser(user),
+            (err) => {
+                console.log(err);
+            });
     };
     useEffect(() => {
         document.title = 'Mesto';
