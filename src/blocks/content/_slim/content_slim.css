@@ -1,0 +1,8 @@
+.content_slim {
+    max-width: 358px;
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+}

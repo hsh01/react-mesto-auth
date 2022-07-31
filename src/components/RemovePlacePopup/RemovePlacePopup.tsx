@@ -23,7 +23,7 @@ export const RemovePlacePopup = ({cardId, isOpen, onClose, onCardRemove}: Props)
                        onSubmit={handleSubmit}
                        buttonDisabled={false}
         >
-            <input className="form__input" name="_id" type="hidden" required value={cardId}/>
+            <input className="form__input" name="_id" type="hidden" required value={cardId ?? ''}/>
         </PopupWithForm>
     );
 };

@@ -1,20 +1,24 @@
-import {useCallback, useEffect, useState} from 'react';
-import {Header} from "./Header";
-import {Main} from "./Main";
-import {Footer} from "./Footer";
-import {ImagePopup} from "./ImagePopup";
-import {CardModel} from "../models/CardModel";
-import {api} from "../utils/api";
-import {UserInfoModel} from "../models/UserInfoModel";
-import {CurrentUserContext} from '../context/CurrentUserContext';
-import {EditProfilePopup} from "./EditProfilePopup";
-import {EditAvatarPopup} from "./EditAvatarPopup";
-import {AddPlacePopup} from "./AddPlacePopup";
-import {RemovePlacePopup} from "./RemovePlacePopup";
-// @ts-ignore
-import ava from "../images/ava.png";
+import {useCallback, useContext, useEffect, useState} from 'react';
+import {CardModel} from "../../models/CardModel";
+import {Header} from "../../components/Header";
+import {AddPlacePopup} from "../../components/AddPlacePopup";
+import {UserInfoModel} from "../../models/UserInfoModel";
+import {Footer} from "../../components/Footer";
+import {EditProfilePopup} from "../../components/EditProfilePopup";
+import {api} from "../../utils/api";
+import {EditAvatarPopup} from "../../components/EditAvatarPopup";
+import {ImagePopup} from "../../components/ImagePopup";
+import {Main} from "../../components/Main";
+import {RemovePlacePopup} from "../../components/RemovePlacePopup";
+import {CurrentUserContext} from '../../context/CurrentUserContext';
+import {AppContext} from "../../context/AppContext";
+import {useNavigate} from "react-router-dom";
+import {Router} from "../../router";
 
-function App() {
+function Home() {
+
+    const appContext = useContext(AppContext);
+    const navigate = useNavigate();
 
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState<boolean>(false);
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState<boolean>(false);
@@ -27,7 +31,7 @@ function App() {
     const [currentUser, setCurrentUser] = useState<UserInfoModel>({
         name: 'Загрузка...',
         about: '',
-        avatar: ava,
+        avatar: require("../../images/ava.png"),
     });
 
     const [cards, setCards] = useState<CardModel[]>([]);
@@ -73,23 +77,38 @@ function App() {
     function handleCardRemove(cardId: string) {
         return api.deleteCard(cardId!).then(() => {
             setCards((state) => state.filter((c) => c._id !== cardId));
+        }, (err) => {
+            console.log(err);
         });
     }
 
     const handleAddPlaceSubmit = (card: CardModel) => {
-        return api.postCard(card).then(card => setCards([card, ...cards]))
+        return api.postCard(card).then(card => setCards([card, ...cards]),
+            (err) => {
+                console.log(err);
+            });
     }
 
     const handleUpdateUser = (user: { name: string | undefined; about: string | undefined }) => {
-        return api.patchUserInfo(user).then(user => setCurrentUser(user))
+        return api.patchUserInfo(user).then(user => setCurrentUser(user),
+            (err) => {
+                console.log(err);
+            });
     }
 
     const handleUpdateAvatar = (user: { avatar: string }) => {
-        return api.patchUserAvatar(user).then(user => setCurrentUser(user));
+        return api.patchUserAvatar(user).then(user => setCurrentUser(user),
+            (err) => {
+                console.log(err);
+            });
+    }
+
+    function signOut() {
+        localStorage.removeItem('jwt');
+        navigate(Router.LOGIN, {replace: true});
     }
 
     useEffect(() => {
-        document.title = 'Mesto';
         Promise.all([
             api.getUserInfo()
                 .then((user: UserInfoModel) => {
@@ -116,7 +135,13 @@ function App() {
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <Header/>
+            <Header menu={appContext.userData?.email &&
+            (
+                <>
+                    <p className="header__menu-item">{appContext.userData?.email}</p>
+                    <button className="header__signout" onClick={signOut}>Выйти</button>
+                </>
+            )}/>
             <Main onEditAvatar={handleEditAvatarClick}
                   onEditProfile={handleEditProfileClick}
                   onAddPlace={handleAddPlaceClick}
@@ -126,15 +151,31 @@ function App() {
                   onCardRemove={handleRemovePlaceClick}
             />
             <Footer/>
-            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
-                             onUpdateAvatar={handleUpdateAvatar}/>
-            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/>
-            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onCardAdd={handleAddPlaceSubmit}/>
-            <RemovePlacePopup isOpen={isRemovePlacePopupOpen} onClose={closeAllPopups} onCardRemove={handleCardRemove}
-                              cardId={removeCard!}/>
-            <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
+            {
+                isEditAvatarPopupOpen &&
+                <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
+                                 onUpdateAvatar={handleUpdateAvatar}/>
+            }
+            {
+                isEditProfilePopupOpen &&
+                <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
+                                  onUpdateUser={handleUpdateUser}/>}
+            {
+                isAddPlacePopupOpen &&
+                <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onCardAdd={handleAddPlaceSubmit}/>
+            }
+            {
+                isRemovePlacePopupOpen &&
+                <RemovePlacePopup isOpen={isRemovePlacePopupOpen} onClose={closeAllPopups}
+                                  onCardRemove={handleCardRemove}
+                                  cardId={removeCard!}/>
+            }
+            {
+                selectedCard &&
+                <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
+            }
         </CurrentUserContext.Provider>
     );
 }
 
-export default App;
+export {Home};

@@ -11,6 +11,5 @@
      .header__logo {
          max-width: 32vw;
          max-height: calc(32vw * 0.23);
-         margin-left: 27px;
      }
  }

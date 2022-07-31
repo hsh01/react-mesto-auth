@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 type Props = {
     title: string,
@@ -9,20 +9,42 @@ type Props = {
     minLength?: number,
     maxLength?: number,
     required?: boolean,
-    onChange: (arg: any) => void
+    onChange: (arg: any) => void,
+    dark?: boolean
 };
 
-export const Input = (props: Props) => {
+export const Input = ({
+                          title,
+                          name,
+                          value,
+                          error,
+                          type,
+                          minLength,
+                          maxLength,
+                          required,
+                          onChange,
+                          dark = false
+                      }: Props) => {
+
+    const [isFixed, setIsFixed] = useState(false);
+    const [focused, setFocused] = React.useState(false)
+    const onFocus = () => setFocused(true)
+    const onBlur = () => setFocused(false)
+
+    useEffect(() => {
+        setIsFixed(value !== undefined && value.length > 0);
+    }, [value]);
 
     return (
         <label className="form__field">
-            <input className={`form__input${props.error ? ' form__input_type_error' : ''}`}
-                   name={props.name} type={props.type ?? "text"} minLength={props.minLength} maxLength={props.maxLength}
-                   required onChange={props.onChange} value={props.value}/>
-            <span className={`form__placeholder ${props.value ? ' form__placeholder_is-fixed' : ''}`}
-            >{props.title}</span>
-            <span className={`form__input-error ${props.error ? 'form__input-error_active' : ''}`}
-            >{props.error}</span>
+            <input className={`form__input${dark ? ' form__input_dark' : ''} ${error && 'form__input_type_error'}`}
+                   name={name} type={type ?? "text"} minLength={minLength} maxLength={maxLength}
+                   required={required} onChange={onChange} value={value}
+                   onFocus={onFocus}
+                   onBlur={onBlur}
+            />
+            <span className={`form__placeholder ${isFixed && 'form__placeholder_is-fixed'}`}>{title}</span>
+            <span className={`form__input-error ${error && !focused && 'form__input-error_active'}`}>{error}</span>
         </label>
     );
 };
