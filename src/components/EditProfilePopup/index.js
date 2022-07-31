@@ -1,0 +1,1 @@
+export { EditProfilePopup } from './EditProfilePopup';
