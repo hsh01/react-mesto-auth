@@ -1,1 +1,1 @@
-export {AddPlacePopup} from './AddPlacePopup';
+export { AddPlacePopup } from './AddPlacePopup';

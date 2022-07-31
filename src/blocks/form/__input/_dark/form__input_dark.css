@@ -1,0 +1,9 @@
+.form__input_dark {
+    color: #CCCCCC;
+    background-color: black;
+    border-bottom: 2px solid #CCCCCC;
+}
+
+.form__input_dark:hover {
+  border-bottom-color: #fff;
+}
