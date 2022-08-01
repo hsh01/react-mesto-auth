@@ -1,46 +1,65 @@
 export const BASE_URL = 'https://auth.nomoreparties.co';
 export const register = (email, password) => {
+    let resStatus = 0;
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({email, password})
     })
-        .then((response) => response.json())
+        .then((res) => {
+            console.log(res);
+            resStatus = res.status;
+            return res.json();
+        })
         .then((data) => {
-        if (data.data) {
-            return data.data;
-        }
-        if (data.error) {
-            throw data.error;
-        }
-    }, (err) => console.log(err));
+            console.log(data);
+            switch (resStatus) {
+                case 201:
+                    return data;
+                case 400:
+                    if (data.error)
+                        throw data.error;
+                    if (data.message)
+                        throw data.message;
+                    return Promise.reject();
+                default:
+                    return Promise.reject();
+            }
+        });
 };
 export const authorize = (email, password) => {
+    let resStatus = 0;
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({email, password})
     })
-        .then((response => response.json()))
+        .then((res) => {
+            resStatus = res.status;
+            return res.json();
+        })
         .then((data) => {
-        if (data.message) {
-            throw data.message;
-        }
-        if (data.token) {
-            localStorage.setItem('jwt', data.token);
-            return data;
-        }
-    })
-        .catch(err => {
-        console.log(err);
-        return err;
-    });
+            switch (resStatus) {
+                case 200:
+                    if (data.token) {
+                        localStorage.setItem('jwt', data.token);
+                        return data;
+                    }
+                    return data;
+                case 401:
+                    if (data.message)
+                        throw data.message;
+                    return Promise.reject();
+                default:
+                    return Promise.reject();
+            }
+        });
 };
 export const checkToken = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
