@@ -45,21 +45,22 @@ export const PopupWithForm = ({
 
     function handleSubmit(e: any) {
         e.preventDefault();
+
         setSubmitting(true);
-        onSubmit(e).then(() => {
+        new Promise((resolve) => {
+            resolve(onSubmit(e));
+        }).then(() => {
             setSubmitting(false);
             setSubmitted(true);
-        })
-            .then(() => {
-                setTimeout(() => {
-                    onClose();
-                }, 1000);
-            })
-            .catch((error: any) => {
-                console.log(error);
-                setSubmitting(false);
-                setSubmitError(error.toString());
-            });
+        }).then(() => {
+            setTimeout(() => {
+                onClose();
+            }, 1000);
+        }).catch((error: any) => {
+            console.log(error);
+            setSubmitting(false);
+            setSubmitError(error.toString());
+        });
     }
 
 

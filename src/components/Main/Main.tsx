@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {CardModel} from "../../models/CardModel";
 import {Card} from "../Card";
-import {CurrentUserContext} from "../../context/CurrentUserContext";
+import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 
 type Props = {
     cards: CardModel[],

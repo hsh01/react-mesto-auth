@@ -7,7 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {Router} from "../../router";
 import * as auth from "../../utils/auth";
 import {InfoTooltip} from "../../components/InfoTooltip";
-import {AppContext} from "../../context/AppContext";
+import {AppContext} from "../../contexts/AppContext";
 
 const Login: FunctionComponent = () => {
     const appContext = useContext(AppContext);
@@ -40,7 +40,7 @@ const Login: FunctionComponent = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!formValues || !formValues.password) {
+        if (!formValues.email || !formValues.password) {
             return;
         }
         return auth.authorize(formValues.email, formValues.password)
@@ -56,7 +56,8 @@ const Login: FunctionComponent = () => {
                 navigate(Router.HOME, {replace: true});
             })
             .catch(err => {
-                setErrorMessage(err);
+                console.log(err);
+                setErrorMessage(err.toString());
                 setShowErrorPopup(true);
             });
     };

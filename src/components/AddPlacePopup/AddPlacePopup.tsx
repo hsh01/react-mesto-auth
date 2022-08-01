@@ -3,43 +3,30 @@ import {useEffect, useState} from 'react';
 import {CardModel} from "../../models/CardModel";
 import {PopupWithForm} from "../PopupWithForm";
 import {Input} from "../Input";
+import {useFormAndValidation} from "../../hooks/useFormAndValidation";
 
 type Props = {
     isOpen: boolean,
     onClose: () => void,
-    onCardAdd: (card: CardModel) => void,
+    onCardAdd: (card: any) => Promise<any>,
 };
 
-type CardRequest = {
-    name: string,
-    link: string
-}
-
 export const AddPlacePopup = ({isOpen, onClose, onCardAdd}: Props) => {
-
     const initialValues = {name: "", link: ""};
-    const [formValues, setFormValues] = useState<CardRequest>(initialValues);
-    const [formErrors, setFormErrors] = useState<CardRequest>(initialValues);
+    const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation();
 
     useEffect(() => {
-        setFormValues(initialValues);
-    }, [isOpen]);
-
-    const handleChange = (e: any) => {
-        const {name, value, validationMessage} = e.target;
-        setFormErrors({...formErrors, [name]: validationMessage});
-        setFormValues({...formValues, [name]: value});
-    };
+        resetForm(initialValues);
+    }, []);
 
     const handleSubmit = () => {
-        return onCardAdd(formValues);
+        return onCardAdd(values).then(() => resetForm(initialValues));
     };
 
     return (
         <PopupWithForm title="Новое место" name="add_place" buttonLabel="Создать"
                        onClose={onClose} isOpen={isOpen} onSubmit={handleSubmit}
-                       buttonDisabled={Object.values(formErrors).some((value: string) => value.length) ||
-                       !Object.values(formValues).every((value: string) => value.length)}
+                       buttonDisabled={!isValid}
         >
             <fieldset className="form__set">
                 <Input title="Название:"
@@ -47,15 +34,15 @@ export const AddPlacePopup = ({isOpen, onClose, onCardAdd}: Props) => {
                        minLength={2}
                        maxLength={30}
                        onChange={handleChange}
-                       error={formErrors.name}
-                       value={formValues.name}
+                       error={errors.name}
+                       value={values.name}
                 />
                 <Input title="Ссылка на картинку:"
                        name="link"
                        type="url"
                        onChange={handleChange}
-                       error={formErrors.link}
-                       value={formValues.link}
+                       error={errors.link}
+                       value={values.link}
                 />
             </fieldset>
         </PopupWithForm>

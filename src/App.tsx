@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Route, Routes, useNavigate} from 'react-router-dom';
-import {ProtectedRoute} from "./utils/ProtectedRoute";
+import {ProtectedRoute} from "./components/ProtectedRoute";
 import {Home} from "./pages/Home";
 import {Register} from "./pages/Register";
 import {Login} from "./pages/Login";
 import {Router} from "./router";
 import * as auth from "./utils/auth";
-import {AppContext} from "./context/AppContext";
+import {AppContext} from "./contexts/AppContext";
 
-
+/**
+ * Для работы приложения, токен должен лежать в .env.
+ */
 const App = () => {
     const navigate = useNavigate();
-    const [userData, setUserData] = useState<{_id: string, email: string} | null>(null);
+    const [userData, setUserData] = useState<{ _id: string, email: string } | null>(null);
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
     function handleLogin() {

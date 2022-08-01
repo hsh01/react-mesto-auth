@@ -10,8 +10,8 @@ import {EditAvatarPopup} from "../../components/EditAvatarPopup";
 import {ImagePopup} from "../../components/ImagePopup";
 import {Main} from "../../components/Main";
 import {RemovePlacePopup} from "../../components/RemovePlacePopup";
-import {CurrentUserContext} from '../../context/CurrentUserContext';
-import {AppContext} from "../../context/AppContext";
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
+import {AppContext} from "../../contexts/AppContext";
 import {useNavigate} from "react-router-dom";
 import {Router} from "../../router";
 

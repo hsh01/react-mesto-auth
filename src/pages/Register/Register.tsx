@@ -39,12 +39,20 @@ const Register: FunctionComponent = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!formValues || !formValues.password) {
+        if (!formValues.email || !formValues.password) {
             return;
         }
         return auth.register(formValues.email, formValues.password)
-            .then(() => setShowSuccessPopup(true), (error) => {
-                setErrorMessage(error);
+            .then((data) => {
+                if (data.data) {
+                    setShowSuccessPopup(true);
+                } else {
+                    throw data;
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setErrorMessage(err.toString());
                 setShowErrorPopup(true)
             });
     };
@@ -82,14 +90,15 @@ const Register: FunctionComponent = () => {
                     />
                 </fieldset>
             </SignForm>
-            <p className="form__tip">Уже зарегистрированы? <Link className="form__tip" to={Router.LOGIN}>Войти</Link></p>
+            <p className="form__tip">Уже зарегистрированы? <Link className="form__tip" to={Router.LOGIN}>Войти</Link>
+            </p>
             {
                 showSuccessPopup &&
                 <InfoTooltip type="success" isOpen={showSuccessPopup} onClose={handleClosePopups}/>
             }
             {
                 showErrorPopup &&
-                <InfoTooltip type="error" isOpen={showErrorPopup} onClose={handleClosePopups}  message={errorMessage}/>
+                <InfoTooltip type="error" isOpen={showErrorPopup} onClose={handleClosePopups} message={errorMessage}/>
             }
         </>
     );

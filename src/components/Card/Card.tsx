@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {CardModel} from "../../models/CardModel";
-import {CurrentUserContext} from "../../context/CurrentUserContext";
+import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 
 type Props = {
     card: CardModel,

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 type Props = {
     title: string,
     name: string,
-    value?: string,
+    value: string,
     error?: string,
     type?: string,
     minLength?: number,
@@ -16,7 +16,7 @@ type Props = {
 export const Input = ({
                           title,
                           name,
-                          value,
+                          value = '',
                           error,
                           type,
                           minLength,

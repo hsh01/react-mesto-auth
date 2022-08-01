@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {PopupWithForm} from "../PopupWithForm";
-import {CurrentUserContext} from "../../context/CurrentUserContext";
+import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 import {Input} from "../Input";
+import {useFormAndValidation} from "../../hooks/useFormAndValidation";
 
 type Props = {
     isOpen: boolean
@@ -10,38 +11,22 @@ type Props = {
     onUpdateUser: (user: { name: string; about: string }) => void,
 };
 
-type UserRequest = {
-    name: string,
-    about: string
-}
-
 export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}: Props) => {
     const currentUser = React.useContext(CurrentUserContext);
-
-    const initialValues = {name: "", about: ""};
-    const [formValues, setFormValues] = useState<UserRequest>(currentUser);
-    const [formErrors, setFormErrors] = useState<UserRequest>(initialValues);
-
-    useEffect(() => {
-        setFormValues(currentUser);
-    }, [currentUser, isOpen]);
-
-    const handleChange = (e: any) => {
-        const {name, value, validationMessage} = e.target;
-        setFormErrors({...formErrors, [name]: validationMessage});
-        setFormValues({...formValues, [name]: value});
-    };
+    const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation();
 
     const handleSubmit = () => {
-        return onUpdateUser(formValues);
+        return onUpdateUser(values);
     };
+
+    useEffect(() => {
+        resetForm(currentUser);
+    }, [currentUser, isOpen]);
 
     return (
         <PopupWithForm title="Редактировать профиль" name="edit_profile"
                        onClose={onClose} isOpen={isOpen} onSubmit={handleSubmit}
-                       buttonDisabled={Object.values(formErrors).some((value: string) => value.length) ||
-                       !Object.values(formValues).every((value: string) => value.length)
-                       || (formValues.name == currentUser.name && formValues.about == currentUser.about)}
+                       buttonDisabled={!isValid || (values.name == currentUser.name && values.about == currentUser.about)}
         >
             <fieldset className="form__set">
                 <Input title="Имя:"
@@ -49,16 +34,16 @@ export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}: Props) => {
                        minLength={2}
                        maxLength={40}
                        onChange={handleChange}
-                       error={formErrors.name}
-                       value={formValues.name}
+                       error={errors.name}
+                       value={values.name}
                 />
                 <Input title="О себе:"
                        name="about"
                        minLength={2}
                        maxLength={200}
                        onChange={handleChange}
-                       error={formErrors.about}
-                       value={formValues.about}
+                       error={errors.about}
+                       value={values.about}
                 />
             </fieldset>
         </PopupWithForm>
