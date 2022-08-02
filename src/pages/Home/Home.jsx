@@ -1,4 +1,4 @@
-import {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Header} from '../../components/Header';
 import {AddPlacePopup} from '../../components/AddPlacePopup';
 import {Footer} from '../../components/Footer';
