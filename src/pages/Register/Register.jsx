@@ -1,42 +1,31 @@
-import * as React from "react";
-import {useEffect, useState} from "react";
-import {Header} from "../../components/Header";
-import {SignForm} from "../../components/SignForm";
-import {Input} from "../../components/Input";
-import {Link} from "react-router-dom";
-import {Router} from "../../router";
-import * as auth from "../../utils/auth";
-import {InfoTooltip} from "../../components/InfoTooltip";
-
+import * as React from 'react';
+import {useEffect, useMemo, useState} from 'react';
+import {Header} from '../../components/Header';
+import {SignForm} from '../../components/SignForm';
+import {Input} from '../../components/Input';
+import {Link} from 'react-router-dom';
+import {Router} from '../../router';
+import * as auth from '../../utils/auth';
+import {InfoTooltip} from '../../components/InfoTooltip';
+import {useFormAndValidation} from '../../hooks/useFormAndValidation';
 const Register = () => {
-    const initialValues = {email: "", password: ""};
-    const [formValues, setFormValues] = useState(initialValues);
-    const [formErrors, setFormErrors] = useState(initialValues);
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    useEffect(() => {
-        setFormValues(initialValues);
-        setShowSuccessPopup(false);
-        setShowErrorPopup(false);
-        setErrorMessage('');
+    const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation();
+    const initialValues = useMemo(() => {
+        return {email: '', password: ''};
     }, []);
     useEffect(() => {
-        setIsButtonDisabled(Object.values(formErrors).some((value) => value.length) ||
-            !Object.values(formValues).every((value) => value.length));
-    }, [formValues, formErrors]);
-    const handleChange = (e) => {
-        const {name, value, validationMessage} = e.target;
-        setFormErrors({...formErrors, [name]: validationMessage});
-        setFormValues({...formValues, [name]: value});
-    };
+        resetForm(initialValues);
+    }, [resetForm, initialValues]);
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formValues.email || !formValues.password) {
+        if (!values.email || !values.password) {
             return;
         }
-        return auth.register(formValues.email, formValues.password)
+        return auth
+            .register(values.email, values.password)
             .then((data) => {
                 if (data.data) {
                     setShowSuccessPopup(true);
@@ -54,23 +43,55 @@ const Register = () => {
         setShowSuccessPopup(false);
         setShowErrorPopup(false);
     };
-    return (<>
-        <Header menu={<Link className="header__menu-item" to={Router.LOGIN}>Войти</Link>}/>
-        <SignForm name="register" title="Регистрация" onSubmit={handleSubmit} buttonDisabled={isButtonDisabled}
-                  buttonLabel="Зарегистрироваться">
-            <fieldset className="form__set">
-                <Input title="Email" name="email" type="email" onChange={handleChange} error={formErrors.email}
-                       value={formValues.email} dark={true}/>
-                <Input title="Пароль" name="password" type="password" minLength={8} onChange={handleChange}
-                       error={formErrors.password} value={formValues.password} dark={true}/>
-            </fieldset>
-        </SignForm>
-        <p className="form__tip">Уже зарегистрированы? <Link className="form__tip" to={Router.LOGIN}>Войти</Link>
-        </p>
-        {showSuccessPopup &&
-        <InfoTooltip type="success" isOpen={showSuccessPopup} onClose={handleClosePopups}/>}
-        {showErrorPopup &&
-        <InfoTooltip type="error" isOpen={showErrorPopup} onClose={handleClosePopups} message={errorMessage}/>}
-    </>);
+    return (
+        <>
+            <Header
+                menu={
+                    <Link className='header__menu-item' to={Router.LOGIN}>
+                        Войти
+                    </Link>
+                }
+            />
+            <SignForm
+                name='register'
+                title='Регистрация'
+                onSubmit={handleSubmit}
+                buttonDisabled={!isValid}
+                buttonLabel='Зарегистрироваться'
+            >
+                <fieldset className='form__set'>
+                    <Input
+                        title='Email'
+                        name='email'
+                        type='email'
+                        onChange={handleChange}
+                        error={errors.email}
+                        value={values.email}
+                        dark={true}
+                        required={true}
+                    />
+                    <Input
+                        title='Пароль'
+                        name='password'
+                        type='password'
+                        minLength={8}
+                        onChange={handleChange}
+                        error={errors.password}
+                        value={values.password}
+                        dark={true}
+                        required={true}
+                    />
+                </fieldset>
+            </SignForm>
+            <p className='form__tip'>
+                Уже зарегистрированы?{' '}
+                <Link className='form__tip' to={Router.LOGIN}>
+                    Войти
+                </Link>
+            </p>
+            <InfoTooltip type='success' isOpen={showSuccessPopup} onClose={handleClosePopups} />
+            <InfoTooltip type='error' isOpen={showErrorPopup} onClose={handleClosePopups} message={errorMessage} />
+        </>
+    );
 };
 export {Register};

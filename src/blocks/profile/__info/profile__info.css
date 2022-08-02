@@ -15,7 +15,7 @@
         padding-top: 26px;
         padding-bottom: 36px;
         justify-items: center;
-        grid-template-areas: ". name btn";
+        grid-template-areas: '. name btn';
         grid-template-columns: 18px 1fr 18px;
     }
 }

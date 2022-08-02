@@ -14,9 +14,9 @@
 }
 
 .profile__avatar-edit-button:hover {
-    opacity: .8;
-    background-image: url("../../../images/Vector.svg");
+    opacity: 0.8;
+    background-image: url('../../../images/Vector.svg');
     background-repeat: no-repeat;
     background-position: center;
-    transition: opacity .2s ease-in;
+    transition: opacity 0.2s ease-in;
 }

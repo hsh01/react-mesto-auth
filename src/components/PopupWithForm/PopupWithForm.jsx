@@ -1,21 +1,16 @@
 import * as React from 'react';
-import {useCallback, useEffect, useState} from 'react';
-
+import {useEffect, useState} from 'react';
+import {Popup} from '../Popup';
 export const PopupWithForm = ({
-                                  title,
-                                  name,
-                                  children,
-                                  onClose,
-                                  onSubmit,
-                                  buttonDisabled = true,
-                                  isOpen = false,
-                                  buttonLabel = 'Сохранить',
-                              }) => {
-    const handleMouseDown = useCallback((event) => {
-        if (event.target.classList.contains('popup_opened') || event.target.classList.contains('popup__close')) {
-            onClose();
-        }
-    }, [onClose]);
+    title,
+    name,
+    children,
+    onClose,
+    onSubmit,
+    buttonDisabled = true,
+    isOpen = false,
+    buttonLabel = 'Сохранить'
+}) => {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [submitError, setSubmitError] = useState('');
@@ -24,36 +19,40 @@ export const PopupWithForm = ({
         setSubmitted(false);
         setSubmitError('');
     }, [isOpen]);
-
     function handleSubmit(e) {
         e.preventDefault();
         setSubmitting(true);
         new Promise((resolve) => {
             resolve(onSubmit(e));
-        }).then(() => {
-            setSubmitting(false);
-            setSubmitted(true);
-        }).then(() => {
-            setTimeout(() => {
-                onClose();
-            }, 1000);
-        }).catch((error) => {
-            console.log(error);
-            setSubmitting(false);
-            setSubmitError(error.toString());
-        });
+        })
+            .then(() => {
+                setSubmitted(true);
+            })
+            .then(() => {
+                setTimeout(() => {
+                    onClose();
+                }, 1000);
+            })
+            .catch((error) => {
+                console.log(error);
+                setSubmitError(error.toString());
+            })
+            .finally(() => setSubmitting(false));
     }
-
-    return (<div className={`popup${isOpen ? ' popup_opened' : ''}`} onMouseDown={handleMouseDown}>
-        <div className="popup__container">
-            <button className="popup__close" type="button" title="закрыть" aria-label="закрыть"/>
-            <form className="form" name={name} noValidate onSubmit={handleSubmit}>
-                <h2 className="form__header">{title}</h2>
+    return (
+        <Popup isOpen={isOpen} name={name} onClose={onClose}>
+            <form className='form' name={name} noValidate onSubmit={handleSubmit}>
+                <h2 className='form__header'>{title}</h2>
                 {children}
                 <button
-                    className={`form__submit${(buttonDisabled === true ? ' form__submit_disabled' : '')}${(submitting ? ' form__submit_loading' : '')}${(submitted ? ' form__submit_loading-ok' : '')}`}
-                    type="submit">{submitError ? submitError : submitted ? '' : buttonLabel}</button>
+                    className={`form__submit${buttonDisabled === true ? ' form__submit_disabled' : ''}${
+                        submitting ? ' form__submit_loading' : ''
+                    }${submitted ? ' form__submit_loading-ok' : ''}`}
+                    type='submit'
+                >
+                    {submitError ? submitError : submitted ? '' : buttonLabel}
+                </button>
             </form>
-        </div>
-    </div>);
+        </Popup>
+    );
 };

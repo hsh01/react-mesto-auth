@@ -4,13 +4,12 @@ export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({email, password})
     })
         .then((res) => {
-            console.log(res);
             resStatus = res.status;
             return res.json();
         })
@@ -20,10 +19,8 @@ export const register = (email, password) => {
                 case 201:
                     return data;
                 case 400:
-                    if (data.error)
-                        throw data.error;
-                    if (data.message)
-                        throw data.message;
+                    if (data.error) throw data.error;
+                    if (data.message) throw data.message;
                     return Promise.reject();
                 default:
                     return Promise.reject();
@@ -35,7 +32,7 @@ export const authorize = (email, password) => {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({email, password})
@@ -53,8 +50,7 @@ export const authorize = (email, password) => {
                     }
                     return data;
                 case 401:
-                    if (data.message)
-                        throw data.message;
+                    if (data.message) throw data.message;
                     return Promise.reject();
                 default:
                     return Promise.reject();
@@ -65,11 +61,11 @@ export const checkToken = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
         }
     })
-        .then(res => res.json())
-        .then(data => data.data);
+        .then((res) => res.json())
+        .then((data) => data.data);
 };
