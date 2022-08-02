@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "author": "Shamil K.",
     "license": "MIT",
-    "homepage": "https://hsh01.github.io",
+    "homepage": "https://hsh01.github.io/react-mesto-auth/",
     "dependencies": {
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.3.0",
