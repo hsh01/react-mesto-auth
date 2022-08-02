@@ -1,42 +1,36 @@
 import * as React from 'react';
-import {CardModel} from "../../models/CardModel";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext";
+import {CardModel} from '../../models/CardModel';
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 
 type Props = {
-    card: CardModel,
-    onCardClick: (card: CardModel) => void,
-    onCardLike: (card: CardModel) => void,
-    onCardRemove: (cardId: string) => void,
+    card: CardModel;
+    onCardClick: (card: CardModel) => void;
+    onCardLike: (card: CardModel) => void;
+    onCardRemove: (cardId: string) => void;
 };
 
 export const Card = ({card, onCardClick, onCardLike, onCardRemove}: Props) => {
     const currentUser = React.useContext(CurrentUserContext);
     const isOwn = card.owner!._id === currentUser._id;
 
-    const isLiked = card.likes!.some(i => i._id === currentUser._id);
+    const isLiked = card.likes!.some((i) => i._id === currentUser._id);
     const cardLikeButtonClassName = `place__like ${isLiked ? 'place__like_active' : ''}`;
-
 
     function handleClick() {
         onCardClick(card);
     }
 
     return (
-        <article className="place">
-            <img className="place__image" src={card.link} alt={card.name} onClick={handleClick}/>
-            <div className="place__list">
-                <h2 className="place__title">{card.name}</h2>
-                <div className="place__like-wrapper">
-                    <button className={cardLikeButtonClassName} type="button" aria-label="лайк"
-                            onClick={() => onCardLike(card)}/>
-                    <span className="place__like-counter">{card.likes!.length}</span>
+        <article className='place'>
+            <img className='place__image' src={card.link} alt={card.name} onClick={handleClick} />
+            <div className='place__list'>
+                <h2 className='place__title'>{card.name}</h2>
+                <div className='place__like-wrapper'>
+                    <button className={cardLikeButtonClassName} type='button' aria-label='лайк' onClick={() => onCardLike(card)} />
+                    <span className='place__like-counter'>{card.likes!.length}</span>
                 </div>
             </div>
-            {
-                isOwn &&
-                <button className="place__remove" type="button" aria-label="удалить"
-                        onClick={() => onCardRemove(card._id!)}/>
-            }
+            {isOwn && <button className='place__remove' type='button' aria-label='удалить' onClick={() => onCardRemove(card._id!)} />}
         </article>
     );
 };

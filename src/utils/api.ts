@@ -1,4 +1,4 @@
-import {CardModel} from "../models/CardModel";
+import {CardModel} from '../models/CardModel';
 
 class Api {
     private _baseUrl: string;
@@ -14,13 +14,12 @@ class Api {
             ...options,
             headers: {...options?.headers, ...this._headers}
         };
-        return fetch(`${this._baseUrl}/${path}`, options)
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(res.status);
-            });
+        return fetch(`${this._baseUrl}/${path}`, options).then((res) => {
+            if (res.ok) {
+                return res.json();
+            }
+            return Promise.reject(res.status);
+        });
     }
 
     getUserInfo() {
@@ -60,7 +59,7 @@ class Api {
     deleteCard(cardId: string) {
         const path = `cards/${cardId}`;
         return this._request(path, {
-            method: 'DELETE',
+            method: 'DELETE'
         });
     }
 
@@ -75,14 +74,14 @@ class Api {
     _putLike(cardId: string | undefined) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
-            method: 'PUT',
+            method: 'PUT'
         });
     }
 
     _deleteLike(cardId: string | undefined) {
         const path = `cards/${cardId}/likes`;
         return this._request(path, {
-            method: 'DELETE',
+            method: 'DELETE'
         });
     }
 }

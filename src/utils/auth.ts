@@ -1,22 +1,21 @@
 export const BASE_URL = 'https://auth.nomoreparties.co';
 
 export const register = (email: string, password: string) => {
-    let resStatus = 0
+    let resStatus = 0;
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({email, password})
     })
         .then((res) => {
-            console.log(res)
             resStatus = res.status;
-            return res.json()
+            return res.json();
         })
         .then((data) => {
-            console.log(data)
+            console.log(data);
             switch (resStatus) {
                 case 201:
                     return data;
@@ -31,18 +30,18 @@ export const register = (email: string, password: string) => {
 };
 
 export const authorize = (email: string, password: string) => {
-    let resStatus = 0
+    let resStatus = 0;
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({email, password})
     })
         .then((res) => {
             resStatus = res.status;
-            return res.json()
+            return res.json();
         })
         .then((data) => {
             switch (resStatus) {
@@ -65,11 +64,11 @@ export const checkToken = (token: string) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
         }
     })
-        .then(res => res.json())
-        .then(data => data.data)
-}
+        .then((res) => res.json())
+        .then((data) => data.data);
+};

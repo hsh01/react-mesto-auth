@@ -1,9 +1,9 @@
 .form__input_dark {
-    color: #CCCCCC;
+    color: #cccccc;
     background-color: black;
-    border-bottom: 2px solid #CCCCCC;
+    border-bottom: 2px solid #cccccc;
 }
 
 .form__input_dark:hover {
-  border-bottom-color: #fff;
+    border-bottom-color: #fff;
 }

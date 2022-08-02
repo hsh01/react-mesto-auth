@@ -1,8 +1,8 @@
 {
-  "short_name": "Mesto React",
-  "name": "Mesto Application",
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#000000"
+    "short_name": "Mesto React",
+    "name": "Mesto Application",
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#ffffff",
+    "background_color": "#000000"
 }

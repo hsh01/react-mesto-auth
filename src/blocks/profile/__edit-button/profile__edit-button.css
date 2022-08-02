@@ -4,14 +4,14 @@
     background-position: center;
     width: 24px;
     height: 24px;
-    border: 1px solid #FFFFFF;
+    border: 1px solid #ffffff;
     background-color: black;
     cursor: pointer;
     padding: 0;
 }
 
 .profile__edit-button:hover {
-    opacity: .6;
+    opacity: 0.6;
     justify-content: flex-start;
 }
 
