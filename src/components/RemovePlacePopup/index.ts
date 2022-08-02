@@ -1,1 +1,0 @@
-export {RemovePlacePopup} from './RemovePlacePopup';
