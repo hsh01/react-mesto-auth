@@ -7,25 +7,27 @@ export const register = (email, password) => {
             Accept: 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({email, password})
+        body: JSON.stringify({ email, password })
     })
         .then((res) => {
-            resStatus = res.status;
-            return res.json();
-        })
+        resStatus = res.status;
+        return res.json();
+    })
         .then((data) => {
-            console.log(data);
-            switch (resStatus) {
-                case 201:
-                    return data;
-                case 400:
-                    if (data.error) throw data.error;
-                    if (data.message) throw data.message;
-                    return Promise.reject();
-                default:
-                    return Promise.reject();
-            }
-        });
+        console.log(data);
+        switch (resStatus) {
+            case 201:
+                return data;
+            case 400:
+                if (data.error)
+                    throw data.error;
+                if (data.message)
+                    throw data.message;
+                return Promise.reject();
+            default:
+                return Promise.reject();
+        }
+    });
 };
 export const authorize = (email, password) => {
     let resStatus = 0;
@@ -35,27 +37,28 @@ export const authorize = (email, password) => {
             Accept: 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({email, password})
+        body: JSON.stringify({ email, password })
     })
         .then((res) => {
-            resStatus = res.status;
-            return res.json();
-        })
+        resStatus = res.status;
+        return res.json();
+    })
         .then((data) => {
-            switch (resStatus) {
-                case 200:
-                    if (data.token) {
-                        localStorage.setItem('jwt', data.token);
-                        return data;
-                    }
+        switch (resStatus) {
+            case 200:
+                if (data.token) {
+                    localStorage.setItem('jwt', data.token);
                     return data;
-                case 401:
-                    if (data.message) throw data.message;
-                    return Promise.reject();
-                default:
-                    return Promise.reject();
-            }
-        });
+                }
+                return data;
+            case 401:
+                if (data.message)
+                    throw data.message;
+                return Promise.reject();
+            default:
+                return Promise.reject();
+        }
+    });
 };
 export const checkToken = (token) => {
     return fetch(`${BASE_URL}/users/me`, {

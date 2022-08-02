@@ -1,1 +1,1 @@
-export {PopupWithForm} from './PopupWithForm';
+export { PopupWithForm } from './PopupWithForm';

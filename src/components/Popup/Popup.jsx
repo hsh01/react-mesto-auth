@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-export const Popup = ({isOpen, name, onClose, children, as: Tag = 'div'}) => {
+import React, { useEffect } from 'react';
+export const Popup = ({ isOpen, name, onClose, children, as: Tag = 'div' }) => {
     useEffect(() => {
         function closeByEscape(evt) {
             if (evt.key === 'Escape') {
@@ -18,12 +18,10 @@ export const Popup = ({isOpen, name, onClose, children, as: Tag = 'div'}) => {
             onClose();
         }
     };
-    return (
-        <div className={`popup ${isOpen ? 'popup_opened' : ''} popup_type_${name}`} onClick={handleOverlay}>
+    return (<div className={`popup ${isOpen ? 'popup_opened' : ''} popup_type_${name}`} onClick={handleOverlay}>
             <Tag className={`popup__container popup__container_${name}`}>
                 {children}
-                <button className='popup__close' type='button' title='закрыть' aria-label='закрыть' onClick={onClose} />
+                <button className='popup__close' type='button' title='закрыть' aria-label='закрыть' onClick={onClose}/>
             </Tag>
-        </div>
-    );
+        </div>);
 };

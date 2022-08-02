@@ -1,1 +1,1 @@
-export {EditProfilePopup} from './EditProfilePopup';
+export { EditProfilePopup } from './EditProfilePopup';
