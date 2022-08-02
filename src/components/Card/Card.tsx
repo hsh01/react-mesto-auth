@@ -26,11 +26,23 @@ export const Card = ({card, onCardClick, onCardLike, onCardRemove}: Props) => {
             <div className='place__list'>
                 <h2 className='place__title'>{card.name}</h2>
                 <div className='place__like-wrapper'>
-                    <button className={cardLikeButtonClassName} type='button' aria-label='лайк' onClick={() => onCardLike(card)} />
+                    <button
+                        className={cardLikeButtonClassName}
+                        type='button'
+                        aria-label='лайк'
+                        onClick={() => onCardLike(card)}
+                    />
                     <span className='place__like-counter'>{card.likes!.length}</span>
                 </div>
             </div>
-            {isOwn && <button className='place__remove' type='button' aria-label='удалить' onClick={() => onCardRemove(card._id!)} />}
+            {isOwn && (
+                <button
+                    className='place__remove'
+                    type='button'
+                    aria-label='удалить'
+                    onClick={() => onCardRemove(card._id!)}
+                />
+            )}
         </article>
     );
 };

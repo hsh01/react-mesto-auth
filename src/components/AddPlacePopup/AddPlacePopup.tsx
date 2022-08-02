@@ -45,7 +45,14 @@ export const AddPlacePopup = ({isOpen, onClose, onCardAdd}: Props) => {
                     error={errors.name}
                     value={values.name}
                 />
-                <Input title='Ссылка на картинку:' name='link' type='url' onChange={handleChange} error={errors.link} value={values.link} />
+                <Input
+                    title='Ссылка на картинку:'
+                    name='link'
+                    type='url'
+                    onChange={handleChange}
+                    error={errors.link}
+                    value={values.link}
+                />
             </fieldset>
         </PopupWithForm>
     );

@@ -13,7 +13,15 @@ type Props = {
     submitError?: string;
 };
 
-export const SignForm = ({title, name, children, onSubmit, buttonDisabled = true, isOpen = false, buttonLabel = 'Войти'}: Props) => {
+export const SignForm = ({
+    title,
+    name,
+    children,
+    onSubmit,
+    buttonDisabled = true,
+    isOpen = false,
+    buttonLabel = 'Войти'
+}: Props) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {

@@ -13,7 +13,18 @@ type Props = {
     dark?: boolean;
 };
 
-export const Input = ({title, name, value, error, type, minLength, maxLength, required, onChange, dark = false}: Props) => {
+export const Input = ({
+    title,
+    name,
+    value,
+    error,
+    type,
+    minLength,
+    maxLength,
+    required,
+    onChange,
+    dark = false
+}: Props) => {
     const [isFixed, setIsFixed] = useState(false);
     const [focused, setFocused] = React.useState(false);
     const onFocus = () => setFocused(true);

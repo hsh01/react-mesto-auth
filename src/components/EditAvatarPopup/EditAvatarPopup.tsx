@@ -44,7 +44,9 @@ export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}: Props) => {
                         required={true}
                         ref={inputRef}
                     />
-                    <span className={`form__placeholder${fixed ? ' form__placeholder_is-fixed' : ''}`}>Ссылка на аватар:</span>
+                    <span className={`form__placeholder${fixed ? ' form__placeholder_is-fixed' : ''}`}>
+                        Ссылка на аватар:
+                    </span>
                     <span
                         className={`form__input-error ${
                             inputRef.current && inputRef.current.validity.valid ? 'form__input-error_active' : ''
