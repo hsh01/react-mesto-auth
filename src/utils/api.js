@@ -1,14 +1,14 @@
 class Api {
     _baseUrl;
     _headers;
-    constructor({ baseUrl, headers }) {
+    constructor({baseUrl, headers}) {
         this._baseUrl = baseUrl;
         this._headers = headers;
     }
     _request(path, options = undefined) {
         options = {
             ...options,
-            headers: { ...options?.headers, ...this._headers }
+            headers: {...options?.headers, ...this._headers}
         };
         return fetch(`${this._baseUrl}/${path}`, options).then((res) => {
             if (res.ok) {
@@ -55,8 +55,7 @@ class Api {
     changeLikeCardStatus(cardId, isLiked) {
         if (isLiked) {
             return this._putLike(cardId);
-        }
-        else {
+        } else {
             return this._deleteLike(cardId);
         }
     }
@@ -80,4 +79,4 @@ const api = new Api({
         'Content-Type': 'application/json'
     }
 });
-export { api };
+export {api};
