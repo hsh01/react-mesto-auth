@@ -1,28 +1,12 @@
 import React, {useEffect, useState} from 'react';
-
-type Props = {
-    title: string;
-    name: string;
-    value: string;
-    error?: string;
-    type?: string;
-    minLength?: number;
-    maxLength?: number;
-    required?: boolean;
-    onChange: (arg: any) => void;
-    dark?: boolean;
-};
-
-export const Input = ({title, name, value, error, type, minLength, maxLength, required, onChange, dark = false}: Props) => {
+export const Input = ({title, name, value, error, type, minLength, maxLength, required, onChange, dark = false}) => {
     const [isFixed, setIsFixed] = useState(false);
     const [focused, setFocused] = React.useState(false);
     const onFocus = () => setFocused(true);
     const onBlur = () => setFocused(false);
-
     useEffect(() => {
         setIsFixed(value !== undefined && value.length > 0);
     }, [value]);
-
     return (
         <label className='form__field'>
             <input

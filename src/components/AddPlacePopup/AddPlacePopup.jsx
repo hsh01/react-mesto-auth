@@ -3,28 +3,17 @@ import {useEffect, useMemo} from 'react';
 import {PopupWithForm} from '../PopupWithForm';
 import {Input} from '../Input';
 import {useFormAndValidation} from '../../hooks/useFormAndValidation';
-
-type Props = {
-    isOpen: boolean;
-    onClose: () => void;
-    onCardAdd: (card: any) => Promise<any>;
-};
-
-export const AddPlacePopup = ({isOpen, onClose, onCardAdd}: Props) => {
+export const AddPlacePopup = ({isOpen, onClose, onCardAdd}) => {
     const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation();
-
     const initialValues = useMemo(() => {
         return {name: '', link: ''};
     }, []);
-
     useEffect(() => {
         resetForm(initialValues);
     }, [resetForm, initialValues]);
-
     const handleSubmit = () => {
         return onCardAdd(values).then(() => resetForm(initialValues));
     };
-
     return (
         <PopupWithForm
             title='Новое место'

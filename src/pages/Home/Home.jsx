@@ -1,8 +1,6 @@
 import {useCallback, useContext, useEffect, useState} from 'react';
-import {CardModel} from '../../models/CardModel';
 import {Header} from '../../components/Header';
 import {AddPlacePopup} from '../../components/AddPlacePopup';
-import {UserInfoModel} from '../../models/UserInfoModel';
 import {Footer} from '../../components/Footer';
 import {EditProfilePopup} from '../../components/EditProfilePopup';
 import {api} from '../../utils/api';
@@ -14,44 +12,34 @@ import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import {AppContext} from '../../contexts/AppContext';
 import {useNavigate} from 'react-router-dom';
 import {Router} from '../../router';
-
 function Home() {
     const appContext = useContext(AppContext);
     const navigate = useNavigate();
-
-    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState<boolean>(false);
-    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState<boolean>(false);
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState<boolean>(false);
-    const [isRemovePlacePopupOpen, setIsRemovePlacePopupOpen] = useState<boolean>(false);
-    const [selectedCard, setSelectedCard] = useState<CardModel | null>(null);
-
-    const [removeCard, setRemoveCard] = useState<string | null>(null);
-
-    const [currentUser, setCurrentUser] = useState<UserInfoModel>({
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+    const [isRemovePlacePopupOpen, setIsRemovePlacePopupOpen] = useState(false);
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [removeCard, setRemoveCard] = useState(null);
+    const [currentUser, setCurrentUser] = useState({
         name: 'Загрузка...',
         about: '',
         avatar: require('../../images/ava.png')
     });
-
-    const [cards, setCards] = useState<CardModel[]>([]);
-
+    const [cards, setCards] = useState([]);
     const handleEditAvatarClick = () => {
         setIsEditAvatarPopupOpen(true);
     };
-
     const handleEditProfileClick = () => {
         setIsEditProfilePopupOpen(true);
     };
-
     const handleAddPlaceClick = () => {
         setIsAddPlacePopupOpen(true);
     };
-
-    const handleRemovePlaceClick = (cardId: string) => {
+    const handleRemovePlaceClick = (cardId) => {
         setRemoveCard(cardId);
         setIsRemovePlacePopupOpen(true);
     };
-
     const closeAllPopups = useCallback(() => {
         setIsEditAvatarPopupOpen(false);
         setIsEditProfilePopupOpen(false);
@@ -59,23 +47,19 @@ function Home() {
         setIsRemovePlacePopupOpen(false);
         setSelectedCard(null);
     }, []);
-
-    const handleCardClick = (card: CardModel) => {
+    const handleCardClick = (card) => {
         setSelectedCard(card);
     };
-
-    function handleCardLike(card: CardModel) {
-        const isLiked = card.likes!.some((i) => i._id === currentUser._id);
-
+    function handleCardLike(card) {
+        const isLiked = card.likes.some((i) => i._id === currentUser._id);
         api.changeLikeCardStatus(card._id, !isLiked)
             .then((newCard) => {
                 setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
             })
             .catch((err) => console.log(err));
     }
-
-    function handleCardRemove(cardId: string) {
-        return api.deleteCard(cardId!).then(
+    function handleCardRemove(cardId) {
+        return api.deleteCard(cardId).then(
             () => {
                 setCards((state) => state.filter((c) => c._id !== cardId));
             },
@@ -84,8 +68,7 @@ function Home() {
             }
         );
     }
-
-    const handleAddPlaceSubmit = (card: CardModel) => {
+    const handleAddPlaceSubmit = (card) => {
         return api.postCard(card).then(
             (card) => setCards([card, ...cards]),
             (err) => {
@@ -93,8 +76,7 @@ function Home() {
             }
         );
     };
-
-    const handleUpdateUser = (user: {name: string | undefined; about: string | undefined}) => {
+    const handleUpdateUser = (user) => {
         return api.patchUserInfo(user).then(
             (user) => setCurrentUser(user),
             (err) => {
@@ -102,8 +84,7 @@ function Home() {
             }
         );
     };
-
-    const handleUpdateAvatar = (user: {avatar: string}) => {
+    const handleUpdateAvatar = (user) => {
         return api.patchUserAvatar(user).then(
             (user) => setCurrentUser(user),
             (err) => {
@@ -111,21 +92,18 @@ function Home() {
             }
         );
     };
-
     function signOut() {
         localStorage.removeItem('jwt');
         navigate(Router.LOGIN, {replace: true});
     }
-
     useEffect(() => {
         Promise.all([
-            api.getUserInfo().then((user: UserInfoModel) => {
+            api.getUserInfo().then((user) => {
                 setCurrentUser(user);
             }),
             api.getCards().then(setCards)
         ]).catch((err) => console.log(err));
     }, []);
-
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <Header
@@ -157,11 +135,10 @@ function Home() {
                 isOpen={isRemovePlacePopupOpen}
                 onClose={closeAllPopups}
                 onCardRemove={handleCardRemove}
-                cardId={removeCard!}
+                cardId={removeCard}
             />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </CurrentUserContext.Provider>
     );
 }
-
 export {Home};

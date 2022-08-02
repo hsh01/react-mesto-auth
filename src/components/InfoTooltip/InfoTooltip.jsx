@@ -1,14 +1,6 @@
 import React from 'react';
 import {Popup} from '../Popup';
-
-type Props = {
-    type: 'success' | 'error';
-    isOpen: boolean;
-    onClose: () => void;
-    message?: string;
-};
-
-export const InfoTooltip = ({type, isOpen, onClose, message}: Props) => {
+export const InfoTooltip = ({type, isOpen, onClose, message}) => {
     function getMessage() {
         if (message) return <>{message}!</>;
         if (type === 'success') {
@@ -26,7 +18,6 @@ export const InfoTooltip = ({type, isOpen, onClose, message}: Props) => {
             );
         return '';
     }
-
     return (
         <Popup isOpen={isOpen} name='infotooltip' onClose={onClose}>
             <>

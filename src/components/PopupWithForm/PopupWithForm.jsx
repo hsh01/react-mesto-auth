@@ -1,21 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Popup} from '../Popup';
-
-type Props = {
-    title: string;
-    name: string;
-    onClose: () => void;
-    isOpen?: boolean;
-    buttonLabel?: string;
-    children?: React.ReactNode;
-    onSubmit: any;
-    buttonDisabled?: boolean;
-    submitting?: boolean;
-    submitted?: boolean;
-    submitError?: string;
-};
-
 export const PopupWithForm = ({
     title,
     name,
@@ -25,20 +10,17 @@ export const PopupWithForm = ({
     buttonDisabled = true,
     isOpen = false,
     buttonLabel = 'Сохранить'
-}: Props) => {
+}) => {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [submitError, setSubmitError] = useState('');
-
     useEffect(() => {
         setSubmitting(false);
         setSubmitted(false);
         setSubmitError('');
     }, [isOpen]);
-
-    function handleSubmit(e: any) {
+    function handleSubmit(e) {
         e.preventDefault();
-
         setSubmitting(true);
         new Promise((resolve) => {
             resolve(onSubmit(e));
@@ -51,13 +33,12 @@ export const PopupWithForm = ({
                     onClose();
                 }, 1000);
             })
-            .catch((error: any) => {
+            .catch((error) => {
                 console.log(error);
                 setSubmitError(error.toString());
             })
             .finally(() => setSubmitting(false));
     }
-
     return (
         <Popup isOpen={isOpen} name={name} onClose={onClose}>
             <form className='form' name={name} noValidate onSubmit={handleSubmit}>

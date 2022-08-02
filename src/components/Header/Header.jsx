@@ -1,10 +1,5 @@
 import * as React from 'react';
-
-type Props = {
-    menu?: any;
-};
-
-export const Header = (props: Props) => {
+export const Header = (props) => {
     return (
         <header className='header'>
             <div className='header__logo' />

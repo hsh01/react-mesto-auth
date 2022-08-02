@@ -1,32 +1,12 @@
-import React, {FunctionComponent} from 'react';
-import {CardModel} from '../../models/CardModel';
+import React from 'react';
 import {Card} from '../Card';
 import {Profile} from '../Profile';
-
-type Props = {
-    cards: CardModel[];
-    onEditProfile: () => void;
-    onAddPlace: () => void;
-    onEditAvatar: () => void;
-    handleCardClick: (card: CardModel) => void;
-    onCardLike: (card: CardModel) => void;
-    onCardRemove: (cardId: string) => void;
-};
-
-export const Main: FunctionComponent<Props> = ({
-    cards,
-    onEditProfile,
-    onAddPlace,
-    onEditAvatar,
-    handleCardClick,
-    onCardLike,
-    onCardRemove
-}) => {
+export const Main = ({cards, onEditProfile, onAddPlace, onEditAvatar, handleCardClick, onCardLike, onCardRemove}) => {
     return (
         <main className='content'>
             <Profile onAddPlace={onAddPlace} onEditProfile={onEditProfile} onEditAvatar={onEditAvatar} />
             <section className='places'>
-                {cards.map((card: CardModel) => {
+                {cards.map((card) => {
                     return (
                         <Card
                             key={card._id}

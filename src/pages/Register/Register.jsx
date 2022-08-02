@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FunctionComponent, useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Header} from '../../components/Header';
 import {SignForm} from '../../components/SignForm';
 import {Input} from '../../components/Input';
@@ -8,22 +8,18 @@ import {Router} from '../../router';
 import * as auth from '../../utils/auth';
 import {InfoTooltip} from '../../components/InfoTooltip';
 import {useFormAndValidation} from '../../hooks/useFormAndValidation';
-
-const Register: FunctionComponent = () => {
-    const [errorMessage, setErrorMessage] = useState<string>('');
+const Register = () => {
+    const [errorMessage, setErrorMessage] = useState('');
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation();
-
     const initialValues = useMemo(() => {
         return {email: '', password: ''};
     }, []);
-
     useEffect(() => {
         resetForm(initialValues);
     }, [resetForm, initialValues]);
-
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!values.email || !values.password) {
             return;
@@ -43,12 +39,10 @@ const Register: FunctionComponent = () => {
                 setShowErrorPopup(true);
             });
     };
-
     const handleClosePopups = () => {
         setShowSuccessPopup(false);
         setShowErrorPopup(false);
     };
-
     return (
         <>
             <Header
@@ -100,5 +94,4 @@ const Register: FunctionComponent = () => {
         </>
     );
 };
-
 export {Register};

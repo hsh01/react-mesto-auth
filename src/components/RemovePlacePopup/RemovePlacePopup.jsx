@@ -1,18 +1,9 @@
 import * as React from 'react';
 import {PopupWithForm} from '../PopupWithForm';
-
-type Props = {
-    cardId?: string;
-    isOpen: boolean;
-    onClose: () => void;
-    onCardRemove: (card: string) => void;
-};
-
-export const RemovePlacePopup = ({cardId, isOpen, onClose, onCardRemove}: Props) => {
+export const RemovePlacePopup = ({cardId, isOpen, onClose, onCardRemove}) => {
     const handleSubmit = () => {
-        return onCardRemove(cardId!);
+        return onCardRemove(cardId);
     };
-
     return (
         <PopupWithForm
             title='Вы уверены?'

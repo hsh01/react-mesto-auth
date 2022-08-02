@@ -1,31 +1,20 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {PopupWithForm} from '../PopupWithForm';
-
-type Props = {
-    isOpen: boolean;
-    onClose: () => void;
-    onUpdateAvatar: (user: {avatar: string}) => void;
-};
-
-export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}: Props) => {
-    const inputRef = React.useRef<any>(null);
-
+export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
+    const inputRef = React.useRef(null);
     const [fixed, setFixed] = useState(false);
     const [error, setError] = useState('');
-
     function handleSubmit() {
         return onUpdateAvatar({
             avatar: inputRef.current.value
         });
     }
-
     useEffect(() => {
         inputRef.current.value = '';
         setFixed(false);
         setError('');
     }, [isOpen]);
-
     return (
         <PopupWithForm
             title='Обновить аватар'

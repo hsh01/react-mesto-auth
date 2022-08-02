@@ -1,13 +1,6 @@
 import * as React from 'react';
-import {CardModel} from '../../models/CardModel';
 import {Popup} from '../Popup';
-
-type Props = {
-    card: CardModel | null;
-    onClose: () => void;
-};
-
-export const ImagePopup = ({card, onClose}: Props) => {
+export const ImagePopup = ({card, onClose}) => {
     return (
         <Popup isOpen={!!card} onClose={onClose} name='fullscreen' as='figure'>
             <>

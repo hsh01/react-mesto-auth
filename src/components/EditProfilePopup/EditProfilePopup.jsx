@@ -4,25 +4,15 @@ import {PopupWithForm} from '../PopupWithForm';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import {Input} from '../Input';
 import {useFormAndValidation} from '../../hooks/useFormAndValidation';
-
-type Props = {
-    isOpen: boolean;
-    onClose: () => void;
-    onUpdateUser: (user: {name: string; about: string}) => void;
-};
-
-export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}: Props) => {
+export const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
     const currentUser = React.useContext(CurrentUserContext);
     const {values, handleChange, errors, isValid, resetForm} = useFormAndValidation();
-
     const handleSubmit = () => {
         return onUpdateUser(values);
     };
-
     useEffect(() => {
         resetForm(currentUser);
     }, [currentUser, isOpen, resetForm]);
-
     return (
         <PopupWithForm
             title='Редактировать профиль'

@@ -1,21 +1,11 @@
-import React, {ElementType, FunctionComponent, useEffect} from 'react';
-
-type Props = {
-    isOpen: boolean;
-    name: string;
-    onClose: () => void;
-    children: JSX.Element;
-    as?: ElementType;
-};
-
-export const Popup: FunctionComponent<Props> = ({isOpen, name, onClose, children, as: Tag = 'div'}) => {
+import React, {useEffect} from 'react';
+export const Popup = ({isOpen, name, onClose, children, as: Tag = 'div'}) => {
     useEffect(() => {
-        function closeByEscape(evt: KeyboardEvent) {
+        function closeByEscape(evt) {
             if (evt.key === 'Escape') {
                 onClose();
             }
         }
-
         if (isOpen) {
             document.addEventListener('keydown', closeByEscape);
             return () => {
@@ -23,13 +13,11 @@ export const Popup: FunctionComponent<Props> = ({isOpen, name, onClose, children
             };
         }
     }, [isOpen, onClose]);
-
-    const handleOverlay = (e: any) => {
+    const handleOverlay = (e) => {
         if (e.target === e.currentTarget) {
             onClose();
         }
     };
-
     return (
         <div className={`popup ${isOpen ? 'popup_opened' : ''} popup_type_${name}`} onClick={handleOverlay}>
             <Tag className={`popup__container popup__container_${name}`}>

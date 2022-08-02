@@ -1,35 +1,18 @@
 import React, {useEffect, useState} from 'react';
-
-type Props = {
-    title: string;
-    name: string;
-    isOpen?: boolean;
-    buttonLabel?: string;
-    children?: React.ReactNode;
-    onSubmit: any;
-    buttonDisabled?: boolean;
-    submitting?: boolean;
-    submitted?: boolean;
-    submitError?: string;
-};
-
-export const SignForm = ({title, name, children, onSubmit, buttonDisabled = true, isOpen = false, buttonLabel = 'Войти'}: Props) => {
+export const SignForm = ({title, name, children, onSubmit, buttonDisabled = true, isOpen = false, buttonLabel = 'Войти'}) => {
     const [loading, setLoading] = useState(false);
-
     useEffect(() => {
         setLoading(false);
     }, [isOpen]);
-
-    function handleSubmit(e: any) {
+    function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
         onSubmit(e)
-            .catch((error: any) => {
+            .catch((error) => {
                 console.log('error', error);
             })
             .finally(() => setLoading(false));
     }
-
     return (
         <form className='form form_dark' name={name} noValidate onSubmit={handleSubmit}>
             <h2 className='form__header form__header_center'>{title}</h2>

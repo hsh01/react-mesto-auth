@@ -1,15 +1,7 @@
 import React from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-
-type Props = {
-    onAddPlace: () => void;
-    onEditProfile: () => void;
-    onEditAvatar: () => void;
-};
-
-export const Profile = ({onEditProfile, onAddPlace, onEditAvatar}: Props) => {
+export const Profile = ({onEditProfile, onAddPlace, onEditAvatar}) => {
     const currentUser = React.useContext(CurrentUserContext);
-
     return (
         <section className='profile'>
             <div className='profile__container'>

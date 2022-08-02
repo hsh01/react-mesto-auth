@@ -7,16 +7,13 @@ import {Login} from '../pages/Login';
 import {Router} from '../router';
 import * as auth from '../utils/auth';
 import {AppContext} from '../contexts/AppContext';
-
 const App = () => {
     const navigate = useNavigate();
-    const [userData, setUserData] = useState<{_id: string; email: string} | null>(null);
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
+    const [userData, setUserData] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
     function handleLogin() {
         setLoggedIn(true);
     }
-
     useEffect(() => {
         if (localStorage.getItem('jwt')) {
             const jwt = localStorage.getItem('jwt');
@@ -33,7 +30,6 @@ const App = () => {
             }
         }
     }, [navigate]);
-
     return (
         <AppContext.Provider value={{loggedIn, handleLogin, userData}}>
             <Routes>
@@ -51,5 +47,4 @@ const App = () => {
         </AppContext.Provider>
     );
 };
-
 export default App;
